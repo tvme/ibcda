@@ -34,7 +34,9 @@ def cut_file(dir_path, source_file, target_file, num_lines, start_line=0):
                     line_position += 1
 
 if __name__ == '__main__':
-    dir_path = 'C:\Users\User\PycharmProjects\ibcda\data\\'
-    source_file = 'source_test.csv'
-    target_file = 'test.csv'
-    cut_file(dir_path, source_file, target_file, 100, 777)
+    import os
+
+    dir_path = os.getcwdu()
+    source_file = '\data\source_test.csv'
+    target_file = '\data\\test.csv'
+    cut_file(dir_path, source_file, target_file, 100, 0)
