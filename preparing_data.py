@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import gzip
+import os
+import pandas as pd
 
 def unzip_gz(dir_path, file_name_gz, file_name_csv):
     """
@@ -33,10 +35,33 @@ def cut_file(dir_path, source_file, target_file, num_lines, start_line=0):
                         f_target.write(line)
                     line_position += 1
 
-if __name__ == '__main__':
-    import os
+def select_data_with_train(dir_path, train, result, id_set=1):
+    """
+    select rows in dir_path/train with nonempty date in target_train.csv
+    add columns Date and Target
+    wright result.csv
+    use pair ID 1_1 and ID_1_2 if id_set = 1
+    and pair ID 2_1 and ID_2_2 if id_set = 2
+    """
+    train_col_name = list(pd.read_csv(dir_path + '\data\column_names_train.csv', sep=None, engine='python'))
+    train_df = pd.read_csv(dir_path + train, names=train_col_name, sep=None, engine='python')
+    if id_set == 1:
+        target_col_name = ['Date', 'ID_1_1', 'ID_1_2', 'Target']
+        select_col_name = ['ID_1_1', 'ID_1_2']
+    elif id_set == 2:
+        target_col_name = ['Date', 'ID_2_1', 'ID_2_2', 'Target']
+        select_col_name = ['ID_2_1', 'ID_2_2']
+    else:
+        print 'Wrong ID set'
+        return
+    target_train_df = pd.read_csv(dir_path + '\data\\target_train.csv', names=target_col_name, sep=None, engine='python')
+    result_df = pd.merge(train_df, target_train_df, on=select_col_name)
+    result_df.to_csv(dir_path + result)
 
+if __name__ == '__main__':
     dir_path = os.getcwdu()
-    source_file = '\data\source_test.csv'
-    target_file = '\data\\test.csv'
-    cut_file(dir_path, source_file, target_file, 100, 0)
+    # source_file = '\data\source_test.csv'
+    # target_file = '\data\\test.csv'
+    # cut_file(dir_path, source_file, target_file, 100, 0)
+
+    select_data_with_train(dir_path, '\data\\test2.csv', '\data\\result_1.csv', id_set=1)
