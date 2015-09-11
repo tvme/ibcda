@@ -37,7 +37,7 @@ def cut_file(dir_path, source_file, target_file, num_lines, start_line=0):
 
 def select_data_with_train(dir_path, train, result, id_set=1):
     """
-    select rows in dir_path/train with nonempty date in target_train.csv
+    select rows in dir_path/train with ID in target_train_index.csv
     add columns Date and Target
     wright result.csv
     use pair ID 1_1 and ID_1_2 if id_set = 1
@@ -80,6 +80,22 @@ def index_id_target(dir_path, file_index_name, id_set):
     target_train_df = target_train_df.drop_duplicates()
     target_train_df.to_csv(dir_path + file_index_name)
 
+def devide_large_into_pieces(dir_path, large_file, ):
+    """
+    divide large file into list_files
+    all files is num_rows except the last piece
+    :return list_files - list of filename
+    """
+def processing_pieces():
+    """
+    select rows in list_files with ID in target_train_index.csv
+    wright in pieces_N
+    """
+
+def concatenate_pieces():
+    """
+    concatenate files in list_files into result
+    """
 
 if __name__ == '__main__':
     dir_path = os.getcwdu()
