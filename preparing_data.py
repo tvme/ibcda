@@ -54,14 +54,38 @@ def select_data_with_train(dir_path, train, result, id_set=1):
     else:
         print 'Wrong ID set'
         return
-    target_train_df = pd.read_csv(dir_path + '\data\\target_train.csv', names=target_col_name, sep=None, engine='python')
+    target_train_df = pd.read_csv(dir_path + '\data\\target_train_index.csv', sep=None, engine='python')
     result_df = pd.merge(train_df, target_train_df, on=select_col_name)
     result_df.to_csv(dir_path + result)
 
+def index_id_target(dir_path, file_index_name, id_set):
+    """
+    make set of ID (clear duplicate) from dir_path/target_train.csv
+    columns Date and Target will be removed
+    wright in file_index_name
+    use pair ID 1_1 and ID_1_2 if id_set = 1
+    and pair ID 2_1 and ID_2_2 if id_set = 2
+    """
+    if id_set == 1:
+        target_col_name = ['Date', 'ID_1_1', 'ID_1_2', 'Target']
+        select_col_name = ['ID_1_1', 'ID_1_2']
+    elif id_set == 2:
+        target_col_name = ['Date', 'ID_2_1', 'ID_2_2', 'Target']
+        select_col_name = ['ID_2_1', 'ID_2_2']
+    else:
+        print 'Wrong ID set'
+        return
+    target_train_df = pd.read_csv(dir_path + '\data\\target_train.csv', names=target_col_name, usecols=select_col_name,
+                                  sep=None, engine='python')
+    target_train_df = target_train_df.drop_duplicates()
+    target_train_df.to_csv(dir_path + file_index_name)
+
+
 if __name__ == '__main__':
     dir_path = os.getcwdu()
-    # source_file = '\data\source_test.csv'
-    # target_file = '\data\\test.csv'
-    # cut_file(dir_path, source_file, target_file, 100, 0)
+    # source_file = '\data\\train.csv'
+    # target_file = '\data\\test3.csv'
+    # cut_file(dir_path, source_file, target_file, 2500000, 0)
 
-    select_data_with_train(dir_path, '\data\\test2.csv', '\data\\result_1.csv', id_set=1)
+    # index_id_target(dir_path, '\data\\target_train_index.csv', 1)
+    select_data_with_train(dir_path, '\data\\test3.csv', '\data\\result3.csv', id_set=1)
